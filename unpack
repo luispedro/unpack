@@ -1,0 +1,33 @@
+#!  /usr/bin/env python
+# LICENSE : MIT
+
+import argparse
+import sys
+import subprocess
+
+parser = argparse.ArgumentParser(prog='unpack', description='Generic unpacker for tar/zip/7z')
+parser.add_argument('--extract', dest='extract', action='store_true', help='Extract files')
+parser.add_argument('ifile', nargs=1, action='store', help='Input file')
+args = parser.parse_args()
+ifile = args.ifile[0]
+
+if args.extract:
+    if ifile.endswith('zip'):
+        cmdline = ['unzip', ifile]
+    elif ifile.endswith('.7z'):
+        cmdline = ['7z', 'e', ifile]
+    elif ifile.endswith('.tar.gz'):
+        cmdline = ['tar', 'xzf', ifile]
+    elif ifile.endswith('.tar.bz2'):
+        cmdline = ['tar', 'xjf', ifile]
+    elif ifile.endswith('.tar.xz'):
+        cmdline = ['tar', 'xJf', ifile]
+    else:
+        print("Cannot process file {}".format(ifile))
+        sys.exit(1)
+    subprocess.call(cmdline)
+else:
+    parser.print_help()
+
+
+
